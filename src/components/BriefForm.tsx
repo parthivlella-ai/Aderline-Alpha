@@ -22,7 +22,6 @@ import type {
   CommercialLicenseType,
   BriefStatus,
 } from "@/types";
-import { createBrief, updateBrief } from "@/lib/services/briefs";
 
 interface BriefFormProps {
   initialData?: BrandBriefWithBrand;
@@ -257,24 +256,34 @@ export function BriefForm({ initialData, isEdit = false }: BriefFormProps) {
       };
 
       if (isEdit && initialData) {
-        const result = await updateBrief(initialData.id, payload);
-        if (!result.success || !result.brief) {
+        const response = await fetch(`/api/briefs/${initialData.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json();
+        if (!response.ok || !result.success || !result.brief) {
           setServerError(
             result.errors
               ? Object.values(result.errors)[0]
-              : "Failed to update brief."
+              : result.error || "Failed to update brief."
           );
           setIsSubmitting(false);
           return;
         }
         router.push(`/briefs/${initialData.id}`);
       } else {
-        const result = await createBrief(payload);
-        if (!result.success || !result.brief) {
+        const response = await fetch("/api/briefs", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const result = await response.json();
+        if (!response.ok || !result.success || !result.brief) {
           setServerError(
             result.errors
               ? Object.values(result.errors)[0]
-              : "Failed to create brief."
+              : result.error || "Failed to create brief."
           );
           setIsSubmitting(false);
           return;
