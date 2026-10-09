@@ -49,7 +49,7 @@ export function PortfolioCard({ item }: PortfolioCardProps) {
   const isVideo = item.content_type === "video" && item.media_url.endsWith(".mp4");
 
   return (
-    <div className="rounded-xl border border-zinc-800 bg-zinc-900/60 overflow-hidden flex flex-col justify-between hover:border-zinc-700 transition-colors">
+    <div className="rounded-2xl border border-[#261e40] bg-[#140f26] overflow-hidden flex flex-col justify-between hover:border-[#473775] transition-all duration-300 shadow-xl shadow-black/40">
       {/* Media Player / Viewer */}
       <div className="relative bg-black w-full overflow-hidden flex items-center justify-center min-h-[220px] max-h-[360px]">
         {isVideo ? (

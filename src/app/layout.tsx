@@ -15,11 +15,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className="bg-zinc-950 text-zinc-100 antialiased min-h-screen flex flex-col justify-between selection:bg-violet-900 selection:text-violet-100">
+      <body className="bg-[#0b0914] text-[#f5f3ff] antialiased min-h-screen flex flex-col justify-between selection:bg-[#9d7bf5] selection:text-[#0b0914]">
         <Navbar />
         <div className="flex-1 flex flex-col">{children}</div>
-        <footer className="border-t border-zinc-900 py-6 text-center text-xs text-zinc-600 bg-zinc-950">
-          Prismora AI Marketplace • Phase 02 Foundation • Visuals to be designed in Figma
+        <footer className="border-t border-[#1d1633] py-6 text-center text-xs text-[#6e668c] bg-[#0b0914]">
+          <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <span className="tracking-widest uppercase font-mono text-[11px] text-[#5e567c]">
+              CURATED TALENT • CLEAR RIGHTS • CREATIVE FLOW
+            </span>
+            <span className="text-[#6e668c]">
+              Prismora ✦ AI-Native Content Creator Marketplace
+            </span>
+          </div>
         </footer>
       </body>
     </html>

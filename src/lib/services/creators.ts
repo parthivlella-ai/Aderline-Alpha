@@ -39,7 +39,8 @@ export async function getCreators(
         .select(`
           *,
           profile:profiles(*),
-          portfolio_items(*)
+          portfolio_items(*),
+          verifications:creator_verifications(*)
         `)
         .order("created_at", { ascending: false });
 
@@ -92,7 +93,8 @@ export async function getCreatorById(
         .select(`
           *,
           profile:profiles(*),
-          portfolio_items(*)
+          portfolio_items(*),
+          verifications:creator_verifications(*)
         `);
 
       if (isUuid) {

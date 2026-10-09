@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Wrench, Layers, MapPin, Sparkles } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import type { CreatorWithDetails } from "@/types";
 import { VerificationBadge } from "@/components/VerificationBadge";
 
@@ -9,20 +9,11 @@ interface CreatorCardProps {
   isMock?: boolean;
 }
 
-// Format currency
-function formatCurrency(cents: number, currency: string = "USD") {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-    maximumFractionDigits: 0,
-  }).format(cents / 100);
-}
-
 // Format tool names into clean human-readable tags
 function formatToolName(tool: string) {
   const map: Record<string, string> = {
     runway_gen3: "Runway Gen-3",
-    kling_ai: "Kling AI",
+    kling_ai: "Kling 1.5",
     luma_dream_machine: "Luma Dream",
     midjourney_v6: "Midjourney v6",
     flux_1: "FLUX.1",
@@ -33,130 +24,135 @@ function formatToolName(tool: string) {
   return map[tool] || tool.replace(/_/g, " ");
 }
 
+// Background theme color generator for card header artwork
+const BANNER_THEMES = [
+  {
+    bg: "from-[#3b1747] via-[#4d1f5e] to-[#692980]",
+    orb: "bg-gradient-to-tr from-[#f7845f] to-[#fdb750]",
+    badgeBg: "bg-[#251533]/80 border-[#4a2469]",
+    badgeText: "text-[#fbcfe8]",
+  },
+  {
+    bg: "from-[#574499] via-[#6d57b5] to-[#8068cc]",
+    orb: "bg-gradient-to-tr from-[#fdb750] to-[#ffd77d]",
+    badgeBg: "bg-[#2c2057]/80 border-[#554294]",
+    badgeText: "text-[#ede9fe]",
+  },
+  {
+    bg: "from-[#c25132] via-[#e0633e] to-[#f57a53]",
+    orb: "bg-gradient-to-tr from-[#fdb750] to-[#ffffff]",
+    badgeBg: "bg-[#45180f]/80 border-[#853424]",
+    badgeText: "text-[#ffedd5]",
+  },
+  {
+    bg: "from-[#1b344b] via-[#244b6e] to-[#2f6696]",
+    orb: "bg-gradient-to-tr from-[#38bdf8] to-[#93c5fd]",
+    badgeBg: "bg-[#112436]/80 border-[#285780]",
+    badgeText: "text-[#e0f2fe]",
+  },
+];
+
 export function CreatorCard({ creator, isMock = true }: CreatorCardProps) {
   const { profile, portfolio_items } = creator;
 
-  return (
-    <div className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-6 flex flex-col justify-between hover:border-zinc-700 transition-colors">
-      <div>
-        {/* Verification Status Banner */}
-        <div className="mb-4">
-          <VerificationBadge status={creator.verification_status} isMock={isMock} />
-        </div>
+  // Stable index based on id
+  const themeIndex =
+    Math.abs(
+      creator.id.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0)
+    ) % BANNER_THEMES.length;
+  const theme = BANNER_THEMES[themeIndex];
 
-        {/* Creator Identity Header */}
-        <div className="flex items-start gap-4">
-          <div className="w-14 h-14 rounded-full overflow-hidden bg-zinc-800 shrink-0 border border-zinc-700 relative">
-            {profile.avatar_url ? (
+  // Pick top portfolio item if exists
+  const featuredItem = portfolio_items?.[0];
+  const primarySpec =
+    creator.specializations?.[0]?.replace(/_/g, " ").toUpperCase() || "AI CREATIVE";
+  const toolsFormatted = creator.primary_ai_tools.map(formatToolName).slice(0, 3).join(" · ");
+
+  return (
+    <div className="rounded-2xl border border-[#261e40] bg-[#140f26] p-4 flex flex-col justify-between hover:border-[#473775] transition-all duration-300 hover:-translate-y-1 group shadow-lg shadow-black/40">
+      <div>
+        {/* Top Visual Banner / Artwork Showcase */}
+        <div
+          className={`relative w-full h-44 rounded-xl overflow-hidden bg-gradient-to-tr ${theme.bg} flex items-center justify-center p-3 mb-4`}
+        >
+          {/* Subtle thumbnail preview if available */}
+          {featuredItem?.thumbnail_url && (
+            <div className="absolute inset-0 opacity-25 mix-blend-overlay group-hover:opacity-40 transition-opacity">
               <Image
-                src={profile.avatar_url}
-                alt={profile.display_name}
+                src={featuredItem.thumbnail_url}
+                alt={featuredItem.title || "Portfolio preview"}
                 fill
-                sizes="56px"
+                sizes="(max-width: 768px) 100vw, 33vw"
                 className="object-cover"
               />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-zinc-400 font-bold text-lg">
-                {profile.display_name.slice(0, 2).toUpperCase()}
-              </div>
-            )}
+            </div>
+          )}
+
+          {/* Abstract Geometric Solar Motif (Matches Figma Screen 02 Art) */}
+          <div className="relative z-10 flex items-center justify-center pointer-events-none">
+            <div
+              className={`w-16 h-16 rounded-full ${theme.orb} shadow-xl shadow-black/40 group-hover:scale-110 transition-transform duration-500`}
+            />
+            <div className="absolute w-24 h-24 rounded-full border border-white/20 pointer-events-none" />
           </div>
 
+          {/* Top-left category badge */}
+          <div className="absolute top-3 left-3 z-20">
+            <span
+              className={`px-2.5 py-1 rounded-md text-[10px] font-mono tracking-wider uppercase font-semibold border backdrop-blur-md ${theme.badgeBg} ${theme.badgeText}`}
+            >
+              {primarySpec}
+            </span>
+          </div>
+
+          {/* Availability pill if available */}
+          {creator.is_available && (
+            <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-black/50 backdrop-blur-sm border border-emerald-500/30 text-emerald-300 text-[10px] font-medium font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              AVAILABLE
+            </div>
+          )}
+        </div>
+
+        {/* Creator Name & Subtitle */}
+        <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <h3 className="font-semibold text-lg text-white truncate">
+            <h3 className="font-bold text-lg text-white tracking-tight truncate group-hover:text-[#c4b5fd] transition-colors">
               {profile.display_name}
             </h3>
-            <p className="text-xs text-zinc-400">
-              @{profile.handle} • {profile.full_name}
+            <p className="text-[11px] font-mono tracking-wider text-[#9b92b6] uppercase font-semibold mt-0.5 truncate">
+              {creator.tagline || `@${profile.handle}`}
             </p>
-            {profile.location && (
-              <p className="text-[11px] text-zinc-500 flex items-center gap-1 mt-0.5">
-                <MapPin className="w-3 h-3" />
-                {profile.location}
-              </p>
-            )}
           </div>
         </div>
 
-        {/* Tagline & Bio */}
-        {creator.tagline && (
-          <p className="mt-3 text-sm font-medium text-violet-300">
-            {creator.tagline}
-          </p>
-        )}
-        {profile.bio && (
-          <p className="mt-2 text-xs text-zinc-400 line-clamp-2 leading-relaxed">
-            {profile.bio}
-          </p>
-        )}
+        {/* Bio / Capability Summary */}
+        <p className="mt-2.5 text-xs text-[#a097bf] line-clamp-2 leading-relaxed">
+          {profile.bio ||
+            "Next-generation generative AI pipeline director specializing in photorealistic commercial executions."}
+        </p>
 
-        {/* AI Tools & Models */}
-        <div className="mt-4 pt-3 border-t border-zinc-800/80">
-          <div className="flex items-center gap-1.5 text-xs text-zinc-300 font-medium mb-2">
-            <Wrench className="w-3.5 h-3.5 text-violet-400" />
-            AI Tool Stack
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {creator.primary_ai_tools.slice(0, 4).map((tool) => (
-              <span
-                key={tool}
-                className="text-[11px] px-2 py-0.5 rounded bg-zinc-800/80 text-zinc-300 border border-zinc-700/60"
-              >
-                {formatToolName(tool)}
-              </span>
-            ))}
-            {creator.primary_ai_tools.length > 4 && (
-              <span className="text-[11px] px-2 py-0.5 rounded bg-zinc-800/40 text-zinc-500">
-                +{creator.primary_ai_tools.length - 4} more
-              </span>
-            )}
-          </div>
-        </div>
-
-        {/* Specializations */}
-        <div className="mt-3">
-          <div className="flex items-center gap-1.5 text-xs text-zinc-300 font-medium mb-1.5">
-            <Layers className="w-3.5 h-3.5 text-violet-400" />
-            Specialization
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {creator.specializations.map((spec) => (
-              <span
-                key={spec}
-                className="text-[11px] px-2 py-0.5 rounded bg-violet-950/40 text-violet-300 border border-violet-800/30 capitalize"
-              >
-                {spec.replace(/_/g, " ")}
-              </span>
-            ))}
-          </div>
+        {/* Tools list */}
+        <div className="mt-3 text-[11px] font-mono text-[#c4b5fd] truncate">
+          {toolsFormatted}
         </div>
       </div>
 
-      {/* Card Footer: Rates & Profile CTA */}
-      <div className="mt-6 pt-4 border-t border-zinc-800 flex items-center justify-between">
-        <div>
-          <span className="text-[10px] uppercase tracking-wider text-zinc-500 block">
-            Starting Rate
-          </span>
-          <span className="text-sm font-bold text-white">
-            {creator.starting_rate_cents > 0
-              ? `${formatCurrency(creator.starting_rate_cents, creator.currency)}`
-              : "Inquire"}
-          </span>
-        </div>
+      {/* Card Footer: Verification Badge & Direct Profile Link */}
+      <div className="mt-5 pt-3.5 border-t border-[#221a3b] flex items-center justify-between">
+        <VerificationBadge
+          status={creator.verification_status}
+          compact
+          isMock={isMock}
+        />
 
-        <div className="flex items-center gap-3">
-          <span className="text-xs text-zinc-400">
-            {portfolio_items.length} {portfolio_items.length === 1 ? "work" : "works"}
-          </span>
-          <Link
-            href={`/creators/${creator.id}`}
-            className="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-lg bg-zinc-100 text-zinc-950 hover:bg-white transition-colors"
-          >
-            View Profile
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
+        <Link
+          href={`/creators/${creator.id}`}
+          className="w-8 h-8 rounded-full bg-[#1e173b] hover:bg-[#9d7bf5] text-[#c4b5fd] hover:text-[#0b0914] flex items-center justify-center transition-colors border border-[#34275c] group/btn"
+          aria-label={`View ${profile.display_name} profile`}
+        >
+          <ArrowUpRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+        </Link>
       </div>
     </div>
   );

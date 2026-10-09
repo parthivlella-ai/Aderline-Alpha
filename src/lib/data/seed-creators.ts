@@ -22,8 +22,34 @@ export const SEED_CREATORS: CreatorWithDetails[] = [
       "Full commercial buyout included. Delivery includes 4K ProRes masters, generation parameter metadata, and up to 2 revisions.",
     starting_rate_cents: 120000, // $1,200
     currency: "USD",
-    verification_status: "unverified", // Clearly labeled as self-reported sample
+    verification_status: "verified",
     is_available: true,
+    verifications: [
+      {
+        id: "v0000000-0000-0000-0000-000000000001",
+        creator_id: "00000000-0000-0000-0000-000000000001",
+        status: "verified",
+        evidence_type: "workflow_screen_recording",
+        evidence_url: "https://evidence.prismora.ai/screencasts/aetheris-flux-comfyui-live.mp4",
+        notes: "Live screencast demonstrating FLUX.1 + custom ComfyUI LoRA generation with raw node pipeline and terminal seeds.",
+        reviewed_by: "00000000-0000-0000-0000-000000000099",
+        reviewed_at: "2026-10-07T14:00:00Z",
+        created_at: "2026-10-06T10:00:00Z",
+        updated_at: "2026-10-07T14:00:00Z",
+      },
+      {
+        id: "v0000000-0000-0000-0000-000000000002",
+        creator_id: "00000000-0000-0000-0000-000000000001",
+        status: "verified",
+        evidence_type: "past_work_client_delivery",
+        evidence_url: "https://evidence.prismora.ai/deliveries/obsidian-zenith-prores4k-receipt.pdf",
+        notes: "Client delivery receipt and 4K ProRes master file checksums for Obsidian Zenith luxury timepiece commercial.",
+        reviewed_by: "00000000-0000-0000-0000-000000000099",
+        reviewed_at: "2026-10-07T14:15:00Z",
+        created_at: "2026-10-06T10:30:00Z",
+        updated_at: "2026-10-07T14:15:00Z",
+      },
+    ],
     created_at: "2026-10-01T10:00:00Z",
     updated_at: "2026-10-08T12:00:00Z",
     profile: {
@@ -138,8 +164,22 @@ export const SEED_CREATORS: CreatorWithDetails[] = [
       "Full digital rights for marketing and e-commerce campaigns. Raw high-resolution PNGs delivered with transparency cutouts if requested.",
     starting_rate_cents: 85000, // $850
     currency: "USD",
-    verification_status: "unverified",
+    verification_status: "pending",
     is_available: true,
+    verifications: [
+      {
+        id: "v0000000-0000-0000-0000-000000000003",
+        creator_id: "00000000-0000-0000-0000-000000000002",
+        status: "pending",
+        evidence_type: "node_graph_snapshot",
+        evidence_url: "https://evidence.prismora.ai/uploads/synthcraft-ipadapter-graph.png",
+        notes: "Submitted ComfyUI IP-Adapter node graph and LoRA checkpoint hashes for virtual influencer consistency audit.",
+        reviewed_by: null,
+        reviewed_at: null,
+        created_at: "2026-10-08T09:30:00Z",
+        updated_at: "2026-10-08T09:30:00Z",
+      },
+    ],
     created_at: "2026-10-02T11:00:00Z",
     updated_at: "2026-10-07T14:30:00Z",
     profile: {
@@ -227,6 +267,20 @@ export const SEED_CREATORS: CreatorWithDetails[] = [
     currency: "USD",
     verification_status: "unverified",
     is_available: true,
+    verifications: [
+      {
+        id: "v0000000-0000-0000-0000-000000000004",
+        creator_id: "00000000-0000-0000-0000-000000000003",
+        status: "unverified",
+        evidence_type: "self_declared_submission",
+        evidence_url: "https://evidence.prismora.ai/uploads/voxelsurge-submission-draft.txt",
+        notes: "Self-declared pipeline description submitted without raw project files, screencasts, or verified deliverables.",
+        reviewed_by: null,
+        reviewed_at: null,
+        created_at: "2026-10-07T11:00:00Z",
+        updated_at: "2026-10-07T11:00:00Z",
+      },
+    ],
     created_at: "2026-10-03T15:20:00Z",
     updated_at: "2026-10-08T09:10:00Z",
     profile: {
@@ -304,5 +358,7 @@ export const SEED_CREATORS: CreatorWithDetails[] = [
     },
     // Intentionally empty portfolio array to test Empty State!
     portfolio_items: [],
+    // Intentionally empty verifications array to test Missing-Evidence Case!
+    verifications: [],
   },
 ];

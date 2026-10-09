@@ -76,9 +76,40 @@ AI_CCMP/
    npm run type-check
    ```
 
+5. Run test suites & requirements audit:
+   ```bash
+   npm run test:phase2       # Creator profiles & AI portfolios (28 tests)
+   npm run test:phase3       # Brand & agency briefs (35 tests)
+   npm run test:phase4       # Creator discovery & search filtering (23 tests)
+   npm run test:verification # Verification signals: verified, pending, unverified, missing (23 tests)
+   npm run audit             # Full official problem statement requirements audit (20 checks)
+   ```
+
 ---
 
-## 4. Supabase Setup & Database Migration Instructions
+## 4. Application Routes
+
+| Route | Page / Feature | Key Functionality |
+| :--- | :--- | :--- |
+| `/` | Marketplace Overview | Platform introduction, value props, creator/brief entry cards |
+| `/creators` | Creator Discovery Directory | Keyword search, multi-filtering (tools, specializations, content types, availability), empty state handling |
+| `/creators/[id]` | Creator Profile & AI Portfolio | Full creator bio, hardware/pipeline info, interactive portfolio cards with prompt/sampler workflow breakdowns |
+| `/briefs` | Brand Campaign Board | List of open agency & brand briefs with budget ranges, content badges, and license tags |
+| `/briefs/new` | Create Campaign Brief | Validated brief creation form (goals, styles, aspect ratios, budgets, commercial license terms) |
+| `/briefs/[id]` | Brief Detail View | Complete campaign specification, license shield, required tools list, edit CTA |
+| `/briefs/[id]/edit` | Edit Saved Brief | In-place editing of campaign objectives, budgets, and styles with input persistence |
+
+---
+
+## 5. Persistence Architecture & Resilience
+
+Prismora employs a **dual-layer persistence strategy**:
+1. **Production Mode (Supabase PostgreSQL):** When `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are provided in `.env.local`, all operations query and mutate PostgreSQL with Row Level Security.
+2. **Demo / Local Fallback Mode:** If Supabase credentials are not yet configured, Prismora automatically falls back to an in-memory transactional store initialized with realistic seed data. Brief creation, updates, and creator queries continue working seamlessly without runtime exceptions or loss of state during local demo evaluation.
+
+---
+
+## 6. Supabase Setup & Database Migration Instructions
 
 ### Step 1: Create a Supabase Project
 1. Log into your account at [supabase.com](https://supabase.com).
@@ -108,21 +139,15 @@ AI_CCMP/
 2. Copy and paste the contents of [seed.sql](file:///c:/Users/parth/OneDrive/Dokumen/AI_CCMP/supabase/seed.sql).
 3. Click **Run** to populate initial creator profiles, portfolio works, and sample briefs.
 
-### Step 5: (Upcoming in Phase 02/03) Storage Buckets
-When ready to upload media files:
-1. In Supabase, go to **Storage** > **New bucket**.
-2. Create a public bucket named `portfolio-assets`.
-3. Create a private bucket named `verification-evidence`.
-
 ---
 
-## 5. Domain Models & Schema Summary
+## 7. Domain Models & Schema Summary
 
 | Table | Purpose | Key Attributes |
 | :--- | :--- | :--- |
-| `profiles` | Shared identity | `id`, `role`, `handle`, `display_name`, `bio`, `avatar_url` |
-| `creator_profiles` | Creator capabilities | `specializations[]`, `primary_ai_tools[]`, `custom_workflow_summary`, `starting_rate_cents`, `verification_status` |
-| `portfolio_items` | AI asset showcase | `content_type`, `media_url`, `aspect_ratio`, `ai_tools_used[]`, `generation_parameters (jsonb)`, `commercial_rights_granted` |
-| `brand_briefs` | Brand campaign requests | `company_name`, `campaign_goals`, `preferred_style`, `budget_min_cents`, `budget_max_cents`, `status` |
-| `creator_verifications`| Anti-fraud verification | `evidence_type`, `evidence_url`, `status`, `notes` |
-| `engagements` | Contract & collaboration | `agreed_price_cents`, `deliverables_summary`, `revision_limit`, `commercial_license`, `status` |
+| `profiles` | Shared identity | `id`, `role`, `handle`, `display_name`, `bio`, `avatar_url`, `location`, `website_url` |
+| `creator_profiles` | Creator capabilities | `specializations[]`, `primary_ai_tools[]`, `custom_workflow_summary`, `hardware_specs`, `commercial_terms`, `starting_rate_cents`, `verification_status`, `is_available` |
+| `portfolio_items` | AI asset showcase | `content_type`, `media_url`, `thumbnail_url`, `aspect_ratio`, `ai_tools_used[]`, `workflow_breakdown`, `generation_parameters (jsonb)`, `commercial_rights_granted` |
+| `brand_briefs` | Brand campaign requests | `company_name`, `title`, `description`, `campaign_goals`, `target_content_type`, `preferred_style`, `preferred_aspect_ratio`, `commercial_use_requirements`, `budget_min_cents`, `budget_max_cents`, `status` |
+| `creator_verifications`| Anti-fraud verification | `creator_id`, `evidence_type`, `evidence_url`, `verified_tools[]`, `verification_notes`, `status` |
+| `engagements` | Contract & collaboration | `brief_id`, `creator_id`, `brand_id`, `agreed_price_cents`, `deliverables_summary`, `revision_limit`, `commercial_license`, `status` |

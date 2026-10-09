@@ -54,8 +54,22 @@ export function filterCreators(
       const taglineMatch = (creator.tagline || "").toLowerCase().includes(normalizedQuery);
       const workflowMatch = (creator.custom_workflow_summary || "").toLowerCase().includes(normalizedQuery);
       const locationMatch = (profile.location || "").toLowerCase().includes(normalizedQuery);
-      const specMatch = specs.some((s) => s.toLowerCase().includes(normalizedQuery));
-      const toolMatch = tools.some((t) => t.toLowerCase().includes(normalizedQuery));
+      const specMatch = specs.some(
+        (s) =>
+          s.toLowerCase().includes(normalizedQuery) ||
+          s.toLowerCase().replace(/_/g, " ").includes(normalizedQuery)
+      );
+      const toolMatch = tools.some(
+        (t) =>
+          t.toLowerCase().includes(normalizedQuery) ||
+          t.toLowerCase().replace(/_/g, " ").includes(normalizedQuery)
+      );
+      const portfolioMatch = portfolioItems.some(
+        (item) =>
+          (item.title || "").toLowerCase().includes(normalizedQuery) ||
+          (item.description || "").toLowerCase().includes(normalizedQuery) ||
+          (item.workflow_breakdown || "").toLowerCase().includes(normalizedQuery)
+      );
 
       if (
         !nameMatch &&
@@ -66,7 +80,8 @@ export function filterCreators(
         !workflowMatch &&
         !locationMatch &&
         !specMatch &&
-        !toolMatch
+        !toolMatch &&
+        !portfolioMatch
       ) {
         return false;
       }

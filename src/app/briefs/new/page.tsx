@@ -1,43 +1,46 @@
 import Link from "next/link";
-import { ArrowLeft, Sparkles } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { BriefForm } from "@/components/BriefForm";
 
 export const metadata = {
-  title: "Post a Campaign Brief | Prismora",
-  description: "Create and publish a brand campaign brief for generative AI creators.",
+  title: "AI Brief Builder | Prismora",
+  description:
+    "Turn a spark into a creative brief. Tell us the rough idea. Prismora helps structure the details.",
 };
 
 export default function NewBriefPage() {
   return (
-    <div className="max-w-4xl mx-auto px-6 py-10 w-full flex-1">
-      {/* Breadcrumb Navigation */}
-      <div className="mb-6">
-        <Link
-          href="/briefs"
-          className="inline-flex items-center gap-1.5 text-xs font-medium text-zinc-400 hover:text-white transition-colors"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          Back to Campaign Briefs
-        </Link>
-      </div>
-
-      {/* Page Header */}
-      <div className="mb-8 pb-6 border-b border-zinc-800">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-950/50 border border-violet-800/40 text-violet-300 text-xs font-medium mb-3">
-          <Sparkles className="w-3.5 h-3.5 text-violet-400" />
-          Commission AI Talent
+    <div className="flex-1 w-full bg-[#0b0914] min-h-[calc(100vh-4rem)] py-8 md:py-12 px-6">
+      <div className="max-w-6xl mx-auto w-full">
+        {/* Breadcrumb Header (Matches Figma Screen 03) */}
+        <div className="mb-6 flex items-center justify-between">
+          <div className="flex items-center gap-2 text-[11px] font-mono tracking-widest text-[#8c82ab] uppercase font-semibold">
+            <Link
+              href="/briefs"
+              className="hover:text-white transition-colors flex items-center gap-1.5"
+            >
+              <ArrowLeft className="w-3 h-3" />
+              BRIEFS
+            </Link>
+            <span className="text-[#473b66]">/</span>
+            <span className="text-[#c4b5fd]">AI-ASSISTED BRIEF BUILDER</span>
+          </div>
         </div>
-        <h1 className="text-3xl font-bold text-white tracking-tight">
-          Create Campaign Brief
-        </h1>
-        <p className="mt-2 text-sm text-zinc-400 leading-relaxed max-w-2xl">
-          Specify your campaign requirements, style direction, format, aspect ratio,
-          budget range, and commercial licensing terms to attract qualified generative creators.
-        </p>
-      </div>
 
-      {/* Brief Form */}
-      <BriefForm />
+        {/* Page Title & Subtitle */}
+        <div className="mb-10 max-w-2xl">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+            Turn a spark into <br />
+            a creative brief.
+          </h1>
+          <p className="mt-2 text-sm sm:text-base text-[#9b92b6] leading-relaxed">
+            Tell us the rough idea. Prismora helps structure the details — your vision stays in control.
+          </p>
+        </div>
+
+        {/* Interactive Brief Builder Form Component */}
+        <BriefForm />
+      </div>
     </div>
   );
 }

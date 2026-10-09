@@ -5,13 +5,9 @@ import {
   Search,
   X,
   RotateCcw,
-  SlidersHorizontal,
-  Wrench,
-  Layers,
-  Film,
   CheckCircle2,
-  Users,
   SearchX,
+  ChevronDown,
 } from "lucide-react";
 import type { CreatorWithDetails } from "@/types";
 import { CreatorCard } from "@/components/CreatorCard";
@@ -22,35 +18,31 @@ interface CreatorDirectoryExplorerProps {
   isMock?: boolean;
 }
 
-const SPECIALIZATION_OPTIONS = [
-  { value: "all", label: "All Specializations" },
+const PRIMARY_SPECIALIZATION_PILLS = [
+  { value: "all", label: "All creators" },
   { value: "cinematic_video", label: "Cinematic Video" },
-  { value: "product_render", label: "Product Render" },
+  { value: "product_render", label: "Product Visuals" },
   { value: "character_design", label: "Character Design" },
-  { value: "virtual_influencer", label: "Virtual Influencer" },
+  { value: "vfx_composite", label: "VFX & Composite" },
   { value: "motion_graphics", label: "Motion Graphics" },
-  { value: "vfx_composite", label: "VFX Composite" },
-  { value: "concept_art", label: "Concept Art" },
-  { value: "voice_audio", label: "Voice / Audio" },
 ];
 
 const AI_TOOL_OPTIONS = [
-  { value: "all", label: "All AI Tools & Models" },
-  { value: "runway_gen3", label: "Runway Gen-3 Alpha" },
+  { value: "all", label: "Tools: Any" },
+  { value: "runway_gen3", label: "Runway Gen-3" },
   { value: "kling_ai", label: "Kling AI 1.5" },
   { value: "flux_1", label: "FLUX.1 [dev/pro]" },
   { value: "midjourney_v6", label: "Midjourney v6.1" },
-  { value: "comfy_ui", label: "ComfyUI Node Pipelines" },
-  { value: "luma_dream_machine", label: "Luma Dream Machine" },
-  { value: "eleven_labs", label: "ElevenLabs" },
+  { value: "comfy_ui", label: "ComfyUI Pipelines" },
+  { value: "eleven_labs", label: "ElevenLabs Voice" },
 ];
 
 const CONTENT_TYPE_OPTIONS = [
-  { value: "all", label: "All Portfolio Types" },
-  { value: "video", label: "Video Spot / Commercial" },
-  { value: "image", label: "Still Image / Render" },
-  { value: "3d", label: "3D Asset / Simulation" },
-  { value: "audio", label: "Voice / Soundscape" },
+  { value: "all", label: "Format: Any" },
+  { value: "video", label: "Video Commercials" },
+  { value: "image", label: "Still Keyframes" },
+  { value: "3d", label: "3D Assets" },
+  { value: "audio", label: "Audio & Soundscapes" },
 ];
 
 export function CreatorDirectoryExplorer({
@@ -94,194 +86,150 @@ export function CreatorDirectoryExplorer({
 
   return (
     <div className="space-y-6">
-      {/* Search Bar & Primary Filter Controls */}
-      <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5 space-y-4">
-        {/* Keyword Search Input */}
-        <div className="relative">
-          <Search className="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search creators by name, handle, bio keywords, or pipeline tools..."
-            className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-xs text-white placeholder-zinc-500 focus:outline-none focus:ring-1 focus:ring-violet-500 transition-colors"
-          />
-          {query && (
-            <button
-              type="button"
-              onClick={() => setQuery("")}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
-              title="Clear search query"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          )}
+      {/* Search Input Bar (Figma Screen 02 Search Capsule) */}
+      <div className="relative w-full">
+        <Search className="w-4 h-4 text-[#7e749e] absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search creators, tools, skills, or visual styles..."
+          className="w-full pl-11 pr-28 py-3.5 rounded-2xl bg-[#140f26] border border-[#271f43] text-sm text-white placeholder-[#7e749e] focus:outline-none focus:border-[#9d7bf5] focus:ring-1 focus:ring-[#9d7bf5] transition-all shadow-inner"
+        />
+
+        {/* Clear query button if typed */}
+        {query && (
+          <button
+            type="button"
+            onClick={() => setQuery("")}
+            className="absolute right-20 top-1/2 -translate-y-1/2 text-[#7e749e] hover:text-white p-1"
+            title="Clear search"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
+
+        {/* Sort indicator badge on right edge */}
+        <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none">
+          <span className="hidden sm:inline-flex items-center text-[11px] font-mono text-[#8c82ab] bg-[#1d1633] px-2.5 py-1 rounded-lg border border-[#312554]">
+            Sort: Recommended
+          </span>
         </div>
+      </div>
 
-        {/* Dropdown Filters Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
-          {/* Specialization Filter */}
-          <div>
-            <label className="block text-[11px] font-medium text-zinc-400 mb-1 flex items-center gap-1.5">
-              <Layers className="w-3 h-3 text-violet-400" />
-              Specialization
-            </label>
-            <select
-              value={specialization}
-              onChange={(e) => setSpecialization(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-white focus:outline-none focus:ring-1 focus:ring-violet-500"
-            >
-              {SPECIALIZATION_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-          </div>
+      {/* Specialization Filter Pills Bar */}
+      <div className="flex flex-col gap-3 pt-1">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-[11px] font-mono tracking-wider text-[#7e749e] uppercase font-semibold mr-1">
+            SPECIALIZATION
+          </span>
 
-          {/* AI Tool & Model Filter */}
-          <div>
-            <label className="block text-[11px] font-medium text-zinc-400 mb-1 flex items-center gap-1.5">
-              <Wrench className="w-3 h-3 text-violet-400" />
-              AI Tool / Model
-            </label>
+          {PRIMARY_SPECIALIZATION_PILLS.map((pill) => {
+            const isActive = specialization === pill.value;
+            return (
+              <button
+                key={pill.value}
+                type="button"
+                onClick={() => setSpecialization(pill.value)}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-medium transition-all ${
+                  isActive
+                    ? "bg-[#2c214d] text-white border border-[#9d7bf5] shadow-sm shadow-[#9d7bf5]/20 font-semibold"
+                    : "bg-[#140f26] text-[#9b92b6] border border-[#271f43] hover:border-[#3d3163] hover:text-white"
+                }`}
+              >
+                {pill.label}
+              </button>
+            );
+          })}
+
+          {/* AI Tools Dropdown Pill */}
+          <div className="relative">
             <select
               value={aiTool}
               onChange={(e) => setAiTool(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-white focus:outline-none focus:ring-1 focus:ring-violet-500"
+              className={`appearance-none pl-3 pr-7 py-1.5 rounded-full text-xs font-medium bg-[#140f26] border cursor-pointer focus:outline-none transition-all ${
+                aiTool !== "all"
+                  ? "border-[#9d7bf5] text-white bg-[#2c214d]"
+                  : "border-[#271f43] text-[#9b92b6] hover:border-[#3d3163] hover:text-white"
+              }`}
             >
               {AI_TOOL_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
+                <option key={opt.value} value={opt.value} className="bg-[#140f26] text-white">
                   {opt.label}
                 </option>
               ))}
             </select>
+            <ChevronDown className="w-3 h-3 text-[#7e749e] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
 
-          {/* Portfolio Content Type Filter */}
-          <div>
-            <label className="block text-[11px] font-medium text-zinc-400 mb-1 flex items-center gap-1.5">
-              <Film className="w-3 h-3 text-violet-400" />
-              Portfolio Content Type
-            </label>
+          {/* Format / Content Type Dropdown Pill */}
+          <div className="relative">
             <select
               value={contentType}
               onChange={(e) => setContentType(e.target.value)}
-              className="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-white focus:outline-none focus:ring-1 focus:ring-violet-500"
+              className={`appearance-none pl-3 pr-7 py-1.5 rounded-full text-xs font-medium bg-[#140f26] border cursor-pointer focus:outline-none transition-all ${
+                contentType !== "all"
+                  ? "border-[#9d7bf5] text-white bg-[#2c214d]"
+                  : "border-[#271f43] text-[#9b92b6] hover:border-[#3d3163] hover:text-white"
+              }`}
             >
               {CONTENT_TYPE_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
+                <option key={opt.value} value={opt.value} className="bg-[#140f26] text-white">
                   {opt.label}
                 </option>
               ))}
             </select>
+            <ChevronDown className="w-3 h-3 text-[#7e749e] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
 
-          {/* Availability Toggle */}
-          <div className="flex flex-col justify-end">
-            <label className="flex items-center gap-2 p-2 rounded-lg bg-zinc-950 border border-zinc-800 cursor-pointer hover:border-zinc-700 transition-colors h-[38px]">
-              <input
-                type="checkbox"
-                checked={availabilityOnly}
-                onChange={(e) => setAvailabilityOnly(e.target.checked)}
-                className="rounded bg-zinc-900 border-zinc-700 text-violet-600 focus:ring-0"
-              />
-              <span className="text-xs text-zinc-300 font-medium">
-                Available Now
-              </span>
-            </label>
-          </div>
-        </div>
+          {/* Availability Filter Toggle Pill */}
+          <button
+            type="button"
+            onClick={() => setAvailabilityOnly(!availabilityOnly)}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1.5 border ${
+              availabilityOnly
+                ? "bg-emerald-950/60 border-emerald-500/60 text-emerald-300 font-semibold"
+                : "bg-[#140f26] border-[#271f43] text-[#9b92b6] hover:border-[#3d3163] hover:text-white"
+            }`}
+          >
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${
+                availabilityOnly ? "bg-emerald-400" : "bg-[#7e749e]"
+              }`}
+            />
+            Available Only
+          </button>
 
-        {/* Active Filter Pills Bar & Counter */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-zinc-800/80">
-          <div className="flex flex-wrap items-center gap-2 text-xs">
-            <span className="text-zinc-500 font-medium">
-              Showing {filteredCreators.length} of {initialCreators.length} creators
-            </span>
-
-            {/* Active Pills */}
-            {query && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-zinc-800 text-zinc-300 text-[11px]">
-                Search: "{query}"
-                <button
-                  type="button"
-                  onClick={() => setQuery("")}
-                  className="hover:text-white ml-0.5"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              </span>
-            )}
-
-            {specialization !== "all" && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-violet-950/60 border border-violet-800/40 text-violet-300 text-[11px] capitalize">
-                Spec: {specialization.replace(/_/g, " ")}
-                <button
-                  type="button"
-                  onClick={() => setSpecialization("all")}
-                  className="hover:text-white ml-0.5"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              </span>
-            )}
-
-            {aiTool !== "all" && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-violet-950/60 border border-violet-800/40 text-violet-300 text-[11px]">
-                Tool: {aiTool.replace(/_/g, " ")}
-                <button
-                  type="button"
-                  onClick={() => setAiTool("all")}
-                  className="hover:text-white ml-0.5"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              </span>
-            )}
-
-            {contentType !== "all" && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-violet-950/60 border border-violet-800/40 text-violet-300 text-[11px] capitalize">
-                Type: {contentType}
-                <button
-                  type="button"
-                  onClick={() => setContentType("all")}
-                  className="hover:text-white ml-0.5"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              </span>
-            )}
-
-            {availabilityOnly && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-950/60 border border-emerald-800/40 text-emerald-300 text-[11px]">
-                Available Only
-                <button
-                  type="button"
-                  onClick={() => setAvailabilityOnly(false)}
-                  className="hover:text-white ml-0.5"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              </span>
-            )}
-          </div>
-
-          {/* Reset Filters CTA */}
+          {/* Reset Filters Action Button */}
           {hasActiveFilters && (
             <button
               type="button"
               onClick={handleResetFilters}
-              className="inline-flex items-center gap-1.5 text-xs text-violet-400 hover:text-violet-300 font-medium transition-colors"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#1b1433] hover:bg-[#251b45] border border-[#3b2d66] text-[#c4b5fd] text-xs font-medium transition-colors"
             >
-              <RotateCcw className="w-3.5 h-3.5" />
-              Reset All Filters
+              <RotateCcw className="w-3 h-3" />
+              Reset All
             </button>
           )}
         </div>
       </div>
 
-      {/* Creator Grid or Clear Empty State */}
+      {/* Catalog Status Bar (Matches Figma Screen 02 Stats Row) */}
+      <div className="flex items-center justify-between pt-2 pb-1 border-b border-[#1c1633] text-xs">
+        <div className="text-[#9b92b6]">
+          <span className="font-bold text-white text-sm">
+            {filteredCreators.length} creators
+          </span>{" "}
+          · Profiles with real workflows, not just pretty pixels.
+        </div>
+
+        <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#16102b] border border-[#2d224d] text-[#c4b5fd] text-[11px] font-mono tracking-wider uppercase font-semibold">
+          <CheckCircle2 className="w-3.5 h-3.5 text-[#9d7bf5]" />
+          VERIFIED DETAILS
+        </div>
+      </div>
+
+      {/* Creator Cards Grid (3 Columns) */}
       {filteredCreators.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCreators.map((creator) => (
@@ -290,36 +238,22 @@ export function CreatorDirectoryExplorer({
         </div>
       ) : (
         /* Empty Results State */
-        <div className="text-center py-20 px-4 rounded-2xl border border-dashed border-zinc-800 bg-zinc-900/30">
-          <div className="w-12 h-12 rounded-xl bg-zinc-850 flex items-center justify-center text-zinc-500 mx-auto mb-3">
-            <SearchX className="w-6 h-6 text-zinc-400" />
+        <div className="rounded-2xl border border-[#271f43] bg-[#140f26] p-12 text-center flex flex-col items-center justify-center">
+          <div className="w-12 h-12 rounded-full bg-[#1f1738] border border-[#34275c] flex items-center justify-center text-[#9d7bf5] mb-4">
+            <SearchX className="w-6 h-6" />
           </div>
-
-          <h3 className="text-base font-semibold text-white">
-            No creators match your search or filter combination
-          </h3>
-
-          <p className="text-xs text-zinc-400 mt-1.5 max-w-md mx-auto leading-relaxed">
-            {query ? (
-              <>
-                No creators matched the query <span className="text-white font-medium">"{query}"</span>{" "}
-                with the applied filters. Try adjusting your search term or clearing active filters.
-              </>
-            ) : (
-              "None of our creators currently match this combination of filters. Try widening your criteria."
-            )}
+          <h3 className="text-lg font-bold text-white">No creators match your filters</h3>
+          <p className="mt-1 text-sm text-[#8c82ab] max-w-md">
+            Try adjusting your search keywords, clearing selected specializations, or expanding the AI tool criteria.
           </p>
-
-          <div className="mt-6">
-            <button
-              type="button"
-              onClick={handleResetFilters}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-zinc-100 hover:bg-white text-zinc-950 font-semibold text-xs transition-colors"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              Reset All Filters & View All Creators
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={handleResetFilters}
+            className="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#9d7bf5] hover:bg-[#b094fa] text-[#0b0914] text-xs font-bold transition-colors"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            Reset All Filters
+          </button>
         </div>
       )}
     </div>

@@ -10,7 +10,11 @@
     "type-check": "tsc --noEmit",
     "test:phase2": "node -e \"require('jiti')(process.cwd())('./scripts/test-phase2.ts')\"",
     "test:phase3": "node -e \"require('jiti')(process.cwd())('./scripts/test-phase3.ts')\"",
-    "test:phase4": "node -e \"require('jiti')(process.cwd())('./scripts/test-phase4.ts')\""
+    "test:phase4": "node -e \"require('jiti')(process.cwd())('./scripts/test-phase4.ts')\"",
+    "test:verification": "node -e \"require('jiti')(process.cwd())('./scripts/test-verification.ts')\"",
+    "test:ai-brief": "node -e \"require('jiti')(process.cwd())('./scripts/test-ai-brief.ts')\"",
+    "test:matching": "node -e \"require('jiti')(process.cwd())('./scripts/test-matching.ts')\"",
+    "audit": "node -e \"require('jiti')(process.cwd())('./scripts/audit-full.ts')\""
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",
