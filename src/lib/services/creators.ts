@@ -1,15 +1,19 @@
 /**
- * Creator Profile & AI Portfolio Data Access Service
+ * Creator Profile & AI Portfolio Data Access & Filtering Service
  *
  * Implements persistent database access via Supabase with transparent
- * fallback to seed demonstration data when Supabase is unconfigured
- * or undergoing migration.
+ * fallback to seed demonstration data, plus multi-dimensional search and
+ * filtering engine.
  */
 
 import { getClientEnv } from "../env";
 import { createClient as createServerSupabase } from "../supabase/server";
 import { SEED_CREATORS } from "../data/seed-creators";
+import { filterCreators, type CreatorFilterCriteria } from "../filters/creators";
 import type { CreatorWithDetails } from "../../types";
+
+export type { CreatorFilterCriteria };
+export { filterCreators };
 
 export interface CreatorFetchResult<T> {
   data: T;
@@ -20,8 +24,12 @@ export interface CreatorFetchResult<T> {
 /**
  * Fetches all creator profiles along with their user profile and portfolio items.
  */
-export async function getCreators(): Promise<CreatorFetchResult<CreatorWithDetails[]>> {
+export async function getCreators(
+  criteria?: CreatorFilterCriteria
+): Promise<CreatorFetchResult<CreatorWithDetails[]>> {
   const env = getClientEnv();
+  let creators: CreatorWithDetails[] = [];
+  let isMock = true;
 
   if (env.isConfigured) {
     try {
@@ -38,20 +46,27 @@ export async function getCreators(): Promise<CreatorFetchResult<CreatorWithDetai
       if (error) {
         console.warn("[Prismora] Supabase query failed, falling back to seed data:", error.message);
       } else if (data && data.length > 0) {
-        return {
-          data: data as unknown as CreatorWithDetails[],
-          isMock: false,
-        };
+        creators = data as unknown as CreatorWithDetails[];
+        isMock = false;
       }
     } catch (err) {
       console.warn("[Prismora] Unexpected Supabase error, falling back to seed data:", err);
     }
   }
 
-  // Fallback to demonstration seed data
+  // Fallback to demonstration seed data if Supabase unconfigured or query returned empty
+  if (creators.length === 0) {
+    creators = SEED_CREATORS;
+  }
+
+  // Apply filters if criteria provided
+  if (criteria) {
+    creators = filterCreators(creators, criteria);
+  }
+
   return {
-    data: SEED_CREATORS,
-    isMock: true,
+    data: creators,
+    isMock,
   };
 }
 
