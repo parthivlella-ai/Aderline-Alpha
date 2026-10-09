@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test:phase2": "node -e \"require('jiti')(process.cwd())('./scripts/test-phase2.ts')\""
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",
