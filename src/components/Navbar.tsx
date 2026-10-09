@@ -27,10 +27,13 @@ export function Navbar() {
             <Users className="w-4 h-4 text-violet-400" />
             Creators
           </Link>
-          <span className="flex items-center gap-1.5 text-zinc-500 cursor-not-allowed">
-            <Briefcase className="w-4 h-4" />
-            Briefs <span className="text-[10px] uppercase tracking-wider bg-zinc-800 px-1.5 py-0.5 rounded text-zinc-400">Phase 03</span>
-          </span>
+          <Link
+            href="/briefs"
+            className="flex items-center gap-1.5 text-zinc-300 hover:text-white transition-colors"
+          >
+            <Briefcase className="w-4 h-4 text-violet-400" />
+            Briefs
+          </Link>
         </nav>
 
         {/* Database Status Pill */}
