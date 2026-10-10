@@ -5,6 +5,19 @@
 :root {
   --background: #0b0914;
   --foreground: #f5f3ff;
+  --card-bg: #140f26;
+  --card-border: #261e40;
+  --muted: #9b92b6;
+  --header-bg: rgba(11, 9, 20, 0.9);
+}
+
+html.light {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
+  --muted: #64748b;
+  --header-bg: rgba(255, 255, 255, 0.9);
 }
 
 body {
@@ -13,6 +26,54 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Light mode specific element adjustments */
+html.light .bg-\[\#0b0914\] {
+  background-color: #f8fafc !important;
+}
+
+html.light .bg-\[\#0c0917\],
+html.light .bg-\[\#0a0812\] {
+  background-color: #f1f5f9 !important;
+}
+
+html.light .bg-\[\#140f26\] {
+  background-color: #ffffff !important;
+}
+
+html.light .bg-\[\#1e1736\],
+html.light .bg-\[\#1a1333\],
+html.light .bg-\[\#1f1738\],
+html.light .bg-\[\#201938\] {
+  background-color: #f1f5f9 !important;
+}
+
+html.light .border-\[\#1d1633\],
+html.light .border-\[\#1f1936\],
+html.light .border-\[\#261e40\],
+html.light .border-\[\#271f43\],
+html.light .border-\[\#201938\],
+html.light .border-\[\#302552\] {
+  border-color: #e2e8f0 !important;
+}
+
+html.light .text-white {
+  color: #0f172a !important;
+}
+
+html.light .text-\[\#f5f3ff\],
+html.light .text-\[\#e0d9f7\],
+html.light .text-\[\#d8cff5\] {
+  color: #1e293b !important;
+}
+
+html.light .text-\[\#9b92b6\],
+html.light .text-\[\#8c82ab\],
+html.light .text-\[\#a097bf\],
+html.light .text-\[\#8e84b0\] {
+  color: #64748b !important;
 }
 
 /* Custom scrollbars */
@@ -21,12 +82,12 @@ body {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #0b0914;
+  background: var(--background);
 }
 ::-webkit-scrollbar-thumb {
   background: #292048;
   border-radius: 9999px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #3e326b;
+html.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
 }

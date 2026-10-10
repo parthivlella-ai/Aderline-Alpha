@@ -107,3 +107,93 @@ export const SUPPORTED_AI_TOOLS: AIToolMetadata[] = [
     popularModels: ["Multilingual v2", "Voice Isolator"],
   },
 ];
+
+export type AccountRole = "client" | "freelancer" | "admin";
+
+export interface UserProfile {
+  id: string;
+  email: string;
+  role: AccountRole;
+  full_name: string;
+  display_name: string;
+  handle: string;
+  avatar_url?: string;
+  company_name?: string;
+  business_category?: string;
+  bio?: string;
+  website_url?: string;
+  skills?: string[];
+  primary_ai_tools?: string[];
+  created_at: string;
+}
+
+export type PostMediaType = "video" | "image";
+
+export interface MarketplacePost {
+  id: string;
+  creator_id: string;
+  creator?: {
+    id: string;
+    display_name: string;
+    handle: string;
+    avatar_url?: string;
+    bio?: string;
+    rating?: number;
+  };
+  title: string;
+  description: string;
+  media_url: string;
+  thumbnail_url?: string;
+  media_type: PostMediaType;
+  price_cents: number;
+  currency: string;
+  category: string;
+  hashtags: string[];
+  ai_tools: string[];
+  commercial_license?: string;
+  aspect_ratio?: string;
+  resolution?: string;
+  workflow?: string;
+  likes_count: number;
+  is_liked?: boolean;
+  is_saved?: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Conversation {
+  id: string;
+  client_id: string;
+  freelancer_id: string;
+  last_message_at: string;
+  created_at: string;
+  other_party?: {
+    id: string;
+    display_name: string;
+    handle: string;
+    avatar_url?: string;
+    role: AccountRole;
+  };
+  last_message?: string;
+}
+
+export interface Message {
+  id: string;
+  conversation_id: string;
+  sender_id: string;
+  content: string;
+  created_at: string;
+}
+
+export const MARKETPLACE_CATEGORIES = [
+  "All",
+  "Food & Beverage",
+  "Fashion & Apparel",
+  "Fitness & Sports",
+  "Advertising & Commercials",
+  "Travel & Hospitality",
+  "Product Promotion",
+  "Entertainment & Gaming",
+  "Tech & Future",
+] as const;
+

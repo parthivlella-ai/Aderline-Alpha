@@ -72,12 +72,13 @@ export function CreatorCard({ creator, isMock = true }: CreatorCardProps) {
     <div className="rounded-2xl border border-[#261e40] bg-[#140f26] p-4 flex flex-col justify-between hover:border-[#473775] transition-all duration-300 hover:-translate-y-1 group shadow-lg shadow-black/40">
       <div>
         {/* Top Visual Banner / Artwork Showcase */}
-        <div
-          className={`relative w-full h-44 rounded-xl overflow-hidden bg-gradient-to-tr ${theme.bg} flex items-center justify-center p-3 mb-4`}
+        <Link
+          href={`/creators/${creator.id}`}
+          className={`relative w-full h-44 rounded-xl overflow-hidden bg-gradient-to-tr ${theme.bg} flex items-center justify-center p-3 mb-4 block group/banner`}
         >
           {/* Subtle thumbnail preview if available */}
           {featuredItem?.thumbnail_url && (
-            <div className="absolute inset-0 opacity-25 mix-blend-overlay group-hover:opacity-40 transition-opacity">
+            <div className="absolute inset-0 opacity-25 mix-blend-overlay group-hover/banner:opacity-40 transition-opacity">
               <Image
                 src={featuredItem.thumbnail_url}
                 alt={featuredItem.title || "Portfolio preview"}
@@ -91,7 +92,7 @@ export function CreatorCard({ creator, isMock = true }: CreatorCardProps) {
           {/* Abstract Geometric Solar Motif (Matches Figma Screen 02 Art) */}
           <div className="relative z-10 flex items-center justify-center pointer-events-none">
             <div
-              className={`w-16 h-16 rounded-full ${theme.orb} shadow-xl shadow-black/40 group-hover:scale-110 transition-transform duration-500`}
+              className={`w-16 h-16 rounded-full ${theme.orb} shadow-xl shadow-black/40 group-hover/banner:scale-110 transition-transform duration-500`}
             />
             <div className="absolute w-24 h-24 rounded-full border border-white/20 pointer-events-none" />
           </div>
@@ -112,13 +113,15 @@ export function CreatorCard({ creator, isMock = true }: CreatorCardProps) {
               AVAILABLE
             </div>
           )}
-        </div>
+        </Link>
 
         {/* Creator Name & Subtitle */}
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
             <h3 className="font-bold text-lg text-white tracking-tight truncate group-hover:text-[#c4b5fd] transition-colors">
-              {profile.display_name}
+              <Link href={`/creators/${creator.id}`} className="hover:underline">
+                {profile.display_name}
+              </Link>
             </h3>
             <p className="text-[11px] font-mono tracking-wider text-[#9b92b6] uppercase font-semibold mt-0.5 truncate">
               {creator.tagline || `@${profile.handle}`}

@@ -177,12 +177,20 @@ export default async function CreatorDetailPage({ params }: PageProps) {
                 </p>
               </div>
 
-              <div className="mt-5 pt-4 border-t border-[#221a38]">
+              <div className="mt-5 pt-4 border-t border-[#221a38] space-y-2">
                 <Link
-                  href="/briefs/new"
+                  href={`/messages?creatorId=${encodeURIComponent(creator.id)}&creatorName=${encodeURIComponent(
+                    creator.profile.display_name || creator.profile.full_name
+                  )}&creatorHandle=${encodeURIComponent(creator.profile.handle)}`}
                   className="w-full py-2.5 px-4 rounded-full bg-[#9d7bf5] hover:bg-[#b094fa] text-[#0b0914] font-bold text-xs text-center inline-block transition-all shadow-md shadow-[#9d7bf5]/20"
                 >
-                  Commission This Creator
+                  Message & Commission Creator
+                </Link>
+                <Link
+                  href="/marketplace"
+                  className="w-full py-2 px-4 rounded-full bg-[#1b1433] hover:bg-[#251b47] border border-[#3b2d66] text-[#c4b5fd] font-semibold text-xs text-center inline-block transition-colors"
+                >
+                  Explore Works
                 </Link>
               </div>
             </div>

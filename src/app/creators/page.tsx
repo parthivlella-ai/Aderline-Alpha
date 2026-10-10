@@ -37,36 +37,32 @@ export default async function CreatorsPage() {
               className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[#201938] border border-[#382b61] text-[#c4b5fd] font-semibold text-sm transition-colors shadow-sm"
             >
               <Compass className="w-4 h-4 text-[#9d7bf5]" />
-              Discover
+              Creators Directory
             </Link>
 
             <Link
-              href="/briefs"
+              href="/marketplace"
               className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[#9288b0] hover:text-white hover:bg-[#16102a] font-medium text-sm transition-colors"
             >
               <Briefcase className="w-4 h-4 text-[#7e749e]" />
-              Briefs
+              Discover Work
             </Link>
 
-            <div className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[#62597f] font-medium text-sm cursor-not-allowed">
-              <span className="flex items-center gap-3">
-                <Bookmark className="w-4 h-4 text-[#52496e]" />
-                Saved creators
-              </span>
-              <span className="text-[10px] font-mono bg-[#18122c] px-2 py-0.5 rounded text-[#7e749e]">
-                Soon
-              </span>
-            </div>
+            <Link
+              href="/saved"
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[#9288b0] hover:text-white hover:bg-[#16102a] font-medium text-sm transition-colors"
+            >
+              <Bookmark className="w-4 h-4 text-[#7e749e]" />
+              Saved Work
+            </Link>
 
-            <div className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[#62597f] font-medium text-sm cursor-not-allowed">
-              <span className="flex items-center gap-3">
-                <MessageSquare className="w-4 h-4 text-[#52496e]" />
-                Messages
-              </span>
-              <span className="text-[10px] font-mono bg-[#18122c] px-2 py-0.5 rounded text-[#7e749e]">
-                Soon
-              </span>
-            </div>
+            <Link
+              href="/messages"
+              className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-[#9288b0] hover:text-white hover:bg-[#16102a] font-medium text-sm transition-colors"
+            >
+              <MessageSquare className="w-4 h-4 text-[#7e749e]" />
+              Messages
+            </Link>
           </nav>
         </div>
 
@@ -76,9 +72,9 @@ export default async function CreatorsPage() {
             <Building className="w-5 h-5 text-[#0b0914]" />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-bold text-white truncate">Brand Studio</p>
+            <p className="text-xs font-bold text-white truncate">Client Workspace</p>
             <p className="text-[10px] text-[#7e749e] font-mono truncate">
-              Client Workspace
+              Prismora Marketplace
             </p>
           </div>
         </div>
@@ -102,11 +98,11 @@ export default async function CreatorsPage() {
 
           {/* Top Right Action Button */}
           <Link
-            href="/briefs/new"
+            href="/posts/new"
             className="self-start md:self-auto inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#9d7bf5] hover:bg-[#b094fa] text-[#0b0914] font-bold text-xs transition-all shadow-md shadow-[#9d7bf5]/20 shrink-0"
           >
             <Plus className="w-4 h-4" />
-            Create a brief
+            Upload Your Work
           </Link>
         </div>
 
